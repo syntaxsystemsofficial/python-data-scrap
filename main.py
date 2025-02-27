@@ -1,3 +1,4 @@
+from flask import Flask
 from flask import Flask, request, jsonify
 from flask_cors import CORS  # Import CORS
 from seleniumbase import Driver
@@ -329,6 +330,7 @@ def get_vehicle_data(vrm):
         # Close the browser
         driver.quit()
 
+
 @app.route("/get-all-vehicle-data", methods=["POST"])
 def handle_all_vehicle_data_request():
     data = request.json  # Get the JSON data from the frontend
@@ -353,6 +355,11 @@ def handle_vehicle_data_request():
     # Fetch the vehicle data
     vehicle_data = get_vehicle_data(vrm)
     return jsonify(vehicle_data)
+
+
+@app.route('/')
+def home():
+    return "Hello, World!"
 
 
 if __name__ == "__main__":
