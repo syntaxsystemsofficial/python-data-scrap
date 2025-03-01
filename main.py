@@ -199,6 +199,31 @@ def get_all_vehicle_data(vrm):
         driver.quit()
 
 
+@app.route("/get-all-vehicle-data", methods=["POST"])
+def handle_all_vehicle_data_request():
+    data = request.json  # Get the JSON data from the frontend
+    vrm = data.get("vrm")  # Extract the registration number
+
+    if not vrm:
+        return jsonify({"error": "Registration number is required"}), 400
+
+    # Fetch the vehicle data
+    vehicle_data = get_all_vehicle_data(vrm)
+    return jsonify(vehicle_data)
+
+
+@app.route("/get-vehicle-data", methods=["GET"])
+def handle_vehicle_data_request():
+    # Get the registration number (VRM) from query parameters
+    vrm = request.args.get("vrm")
+
+    if not vrm:
+        return jsonify({"error": "Registration number is required"}), 400
+
+    # Fetch the vehicle data
+    vehicle_data = get_vehicle_data(vrm)
+    return jsonify(vehicle_data)
+
 def get_vehicle_data(vrm):
     # Initialize the SeleniumBase Driver with UC mode (undetected Chrome)
     driver = Driver(uc=True, headless=True)
@@ -329,32 +354,6 @@ def get_vehicle_data(vrm):
     finally:
         # Close the browser
         driver.quit()
-
-
-@app.route("/get-all-vehicle-data", methods=["POST"])
-def handle_all_vehicle_data_request():
-    data = request.json  # Get the JSON data from the frontend
-    vrm = data.get("vrm")  # Extract the registration number
-
-    if not vrm:
-        return jsonify({"error": "Registration number is required"}), 400
-
-    # Fetch the vehicle data
-    vehicle_data = get_all_vehicle_data(vrm)
-    return jsonify(vehicle_data)
-
-
-@app.route("/get-vehicle-data", methods=["POST"])
-def handle_vehicle_data_request():
-    data = request.json  # Get the JSON data from the frontend
-    vrm = data.get("vrm")  # Extract the registration number
-
-    if not vrm:
-        return jsonify({"error": "Registration number is required"}), 400
-
-    # Fetch the vehicle data
-    vehicle_data = get_vehicle_data(vrm)
-    return jsonify(vehicle_data)
 
 
 @app.route('/')
